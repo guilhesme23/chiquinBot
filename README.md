@@ -21,7 +21,7 @@ Crie uma variável de ambiente com o token do bot:
 $ export BOT_API_TOKEN="<token>"
 ```
 
-Istale o pyTelegramBotAPI:
+Instale o pyTelegramBotAPI:
 
 ```bash
 $ pip install pyTelegramBotAPI
