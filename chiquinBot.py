@@ -10,6 +10,10 @@ def send_welcome(message):
 
 @bot.message_handler(func=lambda message: True)
 def shout_message(message):
-  content = message.text
-  bot.send_message(chat_id=message.chat.id, text=content)
+  	content = message.text
+  	if content == "procure uma musica":
+  		bot.send_message(chat_id=message.chat.id, text="é pra já")
+  		bot.reply_to(message, u"Qual o nome da musica que você gostaria?")
+  	else:
+  		bot.send_message(chat_id=message.chat.id, text=content)
 bot.polling()
