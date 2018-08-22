@@ -11,7 +11,7 @@ def send_welcome(message):
 @bot.message_handler(func=lambda message: True)
 def shout_message(message):
   	content = message.text
-  	if content == "procure uma musica":
+  	if ("musica" in content) and ("procure" in content):
   		bot.send_message(chat_id=message.chat.id, text="é pra já")
   		bot.reply_to(message, u"Qual o nome da musica que você gostaria?")
   	else:
