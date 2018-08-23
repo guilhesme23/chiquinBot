@@ -29,6 +29,6 @@ def search_song(query):
 
   response = requests.get(uri, {'q':query, 'type':'track', 'limit': 1}, headers=header).json()
 
-  print(response)
+  result = (response['tracks']['items'][0]['name'], response['tracks']['items'][0]['external_urls']['spotify'])
 
-  return 'OLA'
+  return result
