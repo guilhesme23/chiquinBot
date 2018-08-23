@@ -25,7 +25,6 @@ def shout_message(message):
   		else:
   			bot.send_message(chat_id=message.chat.id, text=content)
   	else:
-  		music = "Sua musica é: {}".format(content)
   		bot.send_message(chat_id=message.chat.id, text=search_song(content))
   		inMusicConversation = False
 
