@@ -1,6 +1,7 @@
 import os
 import telebot
-from googlesearch import search
+from helpers import search_song
+
 inMusicConversation = False
 
 token = os.environ['BOT_API_TOKEN']
@@ -15,7 +16,7 @@ def shout_message(message):
   	content = message.text
   	global inMusicConversation
 
-  	if  inMusicConversation == False: 
+  	if  not inMusicConversation: 
 
   		if ("musica" in content) and ("procure" in content):
   			bot.send_message(chat_id=message.chat.id, text="é pra já")
@@ -24,9 +25,9 @@ def shout_message(message):
   		else:
   			bot.send_message(chat_id=message.chat.id, text=content)
   	else:
-  		print("preto")
-  		music = "Sua musica é: {}".format(content)
-  		bot.send_message(chat_id=message.chat.id, text=music)
+  		search = search_song(content)
+  		bot.send_message(chat_id=message.chat.id, text=('Musica: ' + search[0]))
+  		bot.send_message(chat_id=message.chat.id, text=search[1])
   		inMusicConversation = False
 
 bot.polling()
