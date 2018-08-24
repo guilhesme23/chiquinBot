@@ -17,8 +17,6 @@ def get_auth():
   headers = {'Authorization': 'Basic ' + auth.decode('utf-8')}
   auth = requests.post('https://accounts.spotify.com/api/token',data={'grant_type': 'client_credentials'},headers=headers).json()
 
-  print(auth)
-
   return auth['access_token']
 
 def search_song(query):
