@@ -1,5 +1,6 @@
 import os
 import telebot
+import random
 from helpers import search_song
 from telebot import types
 
@@ -40,5 +41,21 @@ def get_desired_song(message):
 		search = search_song(message.text)
 		bot.send_message(chat_id=message.chat.id, text=('Musica: ' + search[0]))
 		bot.send_message(chat_id=message.chat.id, text=search[1])
+
+# Handling 'I dont uderstand'
+@bot.message_handler(func=lambda message: True)
+def sorry(message):
+	select = random.uniform(0,100)
+	id = message.chat.id
+	if select < 33.3:
+		bot.send_message(chat_id=id,
+		                 text='Qual é men, fala direito. Entendi foi nada kkkk')
+	elif (select >= 33.3) and (select < 80):
+		bot.send_message(chat_id=id,
+		                 text='Foi mal consagrado, consegui entender não :(')
+	elif (select >= 80) and (select < 90):
+		bot.send_photo(chat_id=id, photo=open('./img/img1.jpg', 'rb'))
+	else:
+		bot.send_photo(chat_id=id, photo=open('./img/img2.jpg', 'rb'))
 
 bot.polling()
