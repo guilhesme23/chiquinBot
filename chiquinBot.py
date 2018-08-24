@@ -12,15 +12,21 @@ bot = telebot.TeleBot(token)
 def search_intent(message):
 	content = message.text
 	content = content.lower()
-	if ('musica' in content) and ('procure' in content):
+	if ('musica' in content) and ('procura' in content):
 		return True
 	else:
 		return False
 
 # Handlers
-@bot.message_handler(commands=['start','help'])
+@bot.message_handler(commands=['start'])
 def send_welcome(message):
     bot.reply_to(message, u"Fala meu consagrado!")
+# Help
+@bot.message_handler(commands=['help'])
+def bot_info(message):
+	bot.send_message(chat_id=message.chat.id, text='''Fala meu confederado!
+Eu me chamo Little Chico, e sou um bot que vai te ajudar a buscar musicas no Spotify!!
+Pra pesquisar, só me pede pra procurar uma musica ai ;)''')
 
 # Handling song research
 @bot.message_handler(func=search_intent)
