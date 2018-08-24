@@ -1,33 +1,38 @@
 import os
 import telebot
 from helpers import search_song
+from telebot import types
 
 inMusicConversation = False
 
 token = os.environ['BOT_API_TOKEN']
 bot = telebot.TeleBot(token)
 
+# Intents
+def search_intent(message):
+	content = message.text
+	content = content.lower()
+	if ('musica' in content) and ('procure' in content):
+		return True
+	else:
+		return False
+
+# Handlers
 @bot.message_handler(commands=['start','help'])
 def send_welcome(message):
     bot.reply_to(message, u"Fala meu consagrado!")
 
-@bot.message_handler(func=lambda message: True)
-def shout_message(message):
-  	content = message.text
-  	global inMusicConversation
+# Handling song research
+@bot.message_handler(func=search_intent)
+def receive_message(message):
+		bot.send_message(chat_id=message.chat.id, text="é pra já")
+		markup = types.ForceReply(selective=False)
+		msg = bot.reply_to(message, u"Qual o nome da musica que você gostaria?", reply_markup=markup)
+		bot.register_next_step_handler(msg, get_desired_song)
 
-  	if  not inMusicConversation: 
-
-  		if ("musica" in content) and ("procure" in content):
-  			bot.send_message(chat_id=message.chat.id, text="é pra já")
-  			bot.reply_to(message, u"Qual o nome da musica que você gostaria?")
-  			inMusicConversation = True
-  		else:
-  			bot.send_message(chat_id=message.chat.id, text=content)
-  	else:
-  		search = search_song(content)
-  		bot.send_message(chat_id=message.chat.id, text=('Musica: ' + search[0]))
-  		bot.send_message(chat_id=message.chat.id, text=search[1])
-  		inMusicConversation = False
+def get_desired_song(message):
+		search = search_song(message.text)
+		bot.send_message(chat_id=message.chat.id, text=('Musica: ' + search[0]))
+		bot.send_message(chat_id=message.chat.id, text=search[1])
 
 bot.polling()
