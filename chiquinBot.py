@@ -2,13 +2,12 @@ import os
 import telebot
 import random
 import time
-from helpers import search_song
+from helpers import SpotifyConnector
 from telebot import types
-
-inMusicConversation = False
 
 token = os.environ['BOT_API_TOKEN']
 bot = telebot.TeleBot(token)
+connector = SpotifyConnector()
 
 
 # Intents
@@ -42,28 +41,33 @@ Pra pesquisar, só me pede pra procurar uma musica ai ;)''')
 # Handling song research
 @bot.message_handler(func=search_intent)
 def receive_message(message):
-        bot.send_message(chat_id=message.chat.id, text="é pra já")
-        markup = types.ForceReply(selective=False)
-        msg = bot.reply_to(
-            message,
-            u"Qual o nome da musica que você gostaria?",
-            reply_markup=markup)
-        bot.register_next_step_handler(msg, get_desired_song)
+    bot.send_message(chat_id=message.chat.id, text="é pra já")
+    markup = types.ForceReply(selective=False)
+    msg = bot.reply_to(
+        message,
+        u"Qual o nome da musica que você gostaria?",
+        reply_markup=markup)
+    bot.register_next_step_handler(msg, get_desired_song)
+
+
+@bot.message_handler(command=['login'])
+def request_login(message):
+    pass
 
 
 def get_desired_song(message):
-        id = message.chat.id
-        bot.send_photo(chat_id=id, photo=open('./img/img2.jpg', 'rb'))
-        bot.send_chat_action(id, 'typing')
-        search = search_song(message.text)
-        time.sleep(2)
-        if search:
-            bot.send_message(chat_id=id, text=('Musica: ' + search[0]))
-            bot.send_message(chat_id=id, text=search[1])
-        else:
-            bot.send_message(
-                chat_id=id,
-                text='Foi mal man, achei essa parada aí não :/')
+    id = message.chat.id
+    bot.send_photo(chat_id=id, photo=open('./img/img2.jpg', 'rb'))
+    bot.send_chat_action(id, 'typing')
+    search = connector.search_song(message.text)
+    time.sleep(2)
+    if search:
+        bot.send_message(chat_id=id, text=('Musica: ' + search[0]))
+        bot.send_message(chat_id=id, text=search[1])
+    else:
+        bot.send_message(
+            chat_id=id,
+            text='Foi mal man, achei essa parada aí não :/')
 
 
 # Handling 'I dont uderstand'
