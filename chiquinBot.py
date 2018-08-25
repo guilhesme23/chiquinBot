@@ -50,7 +50,7 @@ def get_desired_song(message):
 # Handling 'I dont uderstand'
 @bot.message_handler(func=lambda message: True)
 def sorry(message):
-	select = random.uniform(0,100)
+	select = random.random() * 100
 	id = message.chat.id
 	if select < 33.3:
 		bot.send_message(chat_id=id,
