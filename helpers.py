@@ -1,6 +1,7 @@
 import requests
 import os
 import base64
+from pprint import pprint
 
 # Exemplo de request
 r = requests.get('https://jsonplaceholder.typicode.com/posts').json()
@@ -26,7 +27,11 @@ def search_song(query):
   header = {'Authorization': 'Bearer ' + auth}
 
   response = requests.get(uri, {'q':query, 'type':'track', 'limit': 1}, headers=header).json()
+  pprint(response)
 
-  result = (response['tracks']['items'][0]['name'], response['tracks']['items'][0]['external_urls']['spotify'])
-
-  return result
+  if not 'error' in response and response['tracks']['items']:
+    result = (response['tracks']['items'][0]['name'],
+              response['tracks']['items'][0]['external_urls']['spotify'])
+    return result
+  else:
+    return ()

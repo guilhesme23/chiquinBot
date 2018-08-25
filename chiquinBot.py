@@ -20,9 +20,11 @@ def search_intent(message):
 		return False
 
 # Handlers
+# Hello
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     bot.reply_to(message, u"Fala meu consagrado!")
+
 # Help
 @bot.message_handler(commands=['help'])
 def bot_info(message):
@@ -43,9 +45,12 @@ def get_desired_song(message):
 		bot.send_photo(chat_id=id, photo=open('./img/img2.jpg', 'rb'))
 		bot.send_chat_action(id, 'typing')
 		search = search_song(message.text)
-		time.sleep(3)
-		bot.send_message(chat_id=id, text=('Musica: ' + search[0]))
-		bot.send_message(chat_id=id, text=search[1])
+		time.sleep(2)
+		if search:
+			bot.send_message(chat_id=id, text=('Musica: ' + search[0]))
+			bot.send_message(chat_id=id, text=search[1])
+		else:
+			bot.send_message(chat_id=id, text='Foi mal man, achei essa parada aí não :/')
 
 # Handling 'I dont uderstand'
 @bot.message_handler(func=lambda message: True)
